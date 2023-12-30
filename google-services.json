@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "259960104873",
+    "project_id": "phoneouth-da3ce",
+    "storage_bucket": "phoneouth-da3ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259960104873:android:1938f1d7e9ff716be586b8",
+        "android_client_info": {
+          "package_name": "com.natan494.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBK6PkOPCqmINcK14y3PCtfvqDdZEveBQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

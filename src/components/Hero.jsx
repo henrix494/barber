@@ -1,4 +1,5 @@
 import { Image, View } from "react-native";
+
 export default function Hero() {
   return (
     <View>

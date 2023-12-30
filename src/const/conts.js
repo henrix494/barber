@@ -1,4 +1,5 @@
 import haircut from "../../assets/4d415db6cb9793ac76e795b1c9653f6c-men-hair-style-icon.png";
+import profilepicOne from "../../assets/profilePicOne.jpeg";
 const service = [
   {
     name: "תספורת",

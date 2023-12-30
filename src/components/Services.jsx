@@ -1,16 +1,15 @@
-import { View, Text, Image, StyleSheet, Pressable, Alert } from "react-native";
-import service from "../const/conts";
-import { SvgUri } from "react-native-svg";
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from "react-native";
+
 import SvgComponent from "../../assets/razor-straight";
 import { useDispatch, useSelector } from "react-redux";
 import { setService } from "../features/serviceSlice";
 import { setCalendar } from "../features/calendarSlice";
-import { useState } from "react";
 import BookingPros from "./BookingPros";
 export default function Services() {
   const dispatch = useDispatch();
   const service = useSelector((state) => state.service.value);
   const isCalendar = useSelector((state) => state.calendar.value);
+  const isSignedIn = useSelector((state) => state.signIn.isSignedIn);
   const styles = StyleSheet.create({
     container: {
       width: "30%",
@@ -41,20 +40,43 @@ export default function Services() {
       flexDirection: "column",
     },
   });
-
+  const onBackPress = () => {
+    dispatch(setService(null));
+    dispatch(setCalendar(false));
+  };
+  const onServicePress = (innerText) => {
+    dispatch(setService(innerText));
+  };
+  const onBoockingPress = () => {
+    if (isSignedIn) {
+      if (service) {
+        dispatch(setCalendar(true));
+      } else {
+        Alert.alert("בחר שירות");
+      }
+    } else {
+      Alert.alert("התחבר למערכת");
+    }
+  };
   return (
     <>
       {isCalendar ? (
         <View style={{ marginTop: 35, paddingHorizontal: 35 }}>
-          <Pressable
-            style={{ marginBottom: 35 }}
-            onPress={() => {
-              dispatch(setCalendar(false));
-              dispatch(setService(" "));
+          <TouchableOpacity
+            style={{
+              marginBottom: 35,
+              color: "white",
+              marginTop: 12,
+              backgroundColor: "gray",
+              padding: 10,
+              alignSelf: "flex-end",
+              borderRadius: 10,
+              width: "30%",
             }}
+            onPress={onBackPress}
           >
             <Text style={{ color: "white" }}>חזור</Text>
-          </Pressable>
+          </TouchableOpacity>
           <View>
             <BookingPros />
           </View>
@@ -75,13 +97,9 @@ export default function Services() {
             </Text>
           </View>
           <View style={styles.imgContainer}>
-            <Pressable
+            <TouchableOpacity
               style={styles.imgEle}
-              onPress={() => {
-                const innerText = "זקן";
-                dispatch(setService(innerText));
-                dispatch(setCalendar(true));
-              }}
+              onPress={() => onServicePress("זקן")}
             >
               <View
                 style={{
@@ -97,7 +115,7 @@ export default function Services() {
                   זקן
                 </Text>
               </View>
-            </Pressable>
+            </TouchableOpacity>
             <View style={styles.imgEle}>
               <View
                 style={{
@@ -161,19 +179,13 @@ export default function Services() {
                 maxWidth: "70%",
               }}
             >
-              <Pressable
+              <TouchableOpacity
                 style={{
                   color: "white",
                   borderRadius: 20,
                   backgroundColor: "#ffb800",
                 }}
-                onPress={() => {
-                  if (isCalendar) {
-                    s(true);
-                  } else {
-                    Alert.alert("בחר שירות");
-                  }
-                }}
+                onPress={onBoockingPress}
               >
                 <Text
                   style={{
@@ -186,7 +198,7 @@ export default function Services() {
                 >
                   קבע תור
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

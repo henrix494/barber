@@ -1,45 +1,20 @@
 import { View, Text } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-
+import {
+  calendarConfig,
+  calendarTheme,
+  formattedDate,
+  formattedDate2,
+} from "../../utils/calendarConfig";
+import Times from "./Times";
 export default function BookingPros() {
   const [selected, setSelected] = useState("");
-
-  LocaleConfig.locales["he"] = {
-    monthNames: [
-      "ינואר",
-      "פברואר",
-      "מרץ",
-      "אפריל",
-      "מאי",
-      "יוני",
-      "יולי",
-      "אוגוסט",
-      "ספטמבר",
-      "אוקטובר",
-      "נובמבר",
-      "דצמבר",
-    ],
-    monthNamesShort: [
-      "Janv.",
-      "Févr.",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juil.",
-      "Août",
-      "Sept.",
-      "Oct.",
-      "Nov.",
-      "Déc.",
-    ],
-    dayNames: ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"],
-    dayNamesShort: ["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "שבת"].reverse(),
-    today: "היום",
-    firstDay: 0, // Sunday is the first day of the week
-  };
-  const marked = useMemo(() => {
+  const [currentMonth, setCurrentMonth] = useState({
+    currentLifeMonth: "",
+    currentCalendarMonth: formattedDate2,
+  });
+  function getMarkedDates(selected) {
     return {
       [selected]: {
         selected: true,
@@ -48,43 +23,61 @@ export default function BookingPros() {
         selectedTextColor: "white",
       },
     };
-  }, [selected]);
+  }
 
-  const onDayPress = useCallback((day) => {
+  const marked = getMarkedDates(selected);
+
+  function onDayPress(day) {
     setSelected(day.dateString);
+  }
+  useEffect(() => {
+    setCurrentMonth((prev) => ({ ...prev, currentLifeMonth: formattedDate2 }));
   }, []);
+  const handleMonthChange = (month) => {
+    setCurrentMonth((prev) => ({
+      ...prev,
+      currentCalendarMonth: month.month,
+    }));
+  };
+  LocaleConfig.locales["he"] = calendarConfig;
   LocaleConfig.defaultLocale = "he";
 
   return (
     <View>
-      <Calendar
-        onDayPress={onDayPress}
-        theme={{
-          backgroundColor: "black",
-          calendarBackground: "black",
-          textSectionTitleColor: "white",
-
-          selectedDayTextColor: "white",
-          todayTextColor: "white",
-          dayTextColor: "white",
-
-          dotColor: "orange",
-          selectedDotColor: "orange",
-          arrowColor: "orange",
-          monthTextColor: "white",
-          indicatorColor: "white",
-          textDayFontFamily: "monospace",
-          textMonthFontFamily: "monospace",
-          textDayHeaderFontFamily: "monospace",
-          textDayFontWeight: "300",
-          textMonthFontWeight: "bold",
-          textDayHeaderFontWeight: "300",
-          textDayFontSize: 16,
-          textMonthFontSize: 16,
-          textDayHeaderFontSize: 16,
+      <Text
+        style={{
+          color: "white",
+          textAlign: "right",
+          paddingBottom: 10,
+          fontSize: 30,
+          fontWeight: "bold",
         }}
-        markedDates={marked}
-      />
+      >
+        קביעת תור
+      </Text>
+      <View
+        style={{
+          borderTopWidth: 3,
+          borderColor: "white",
+          paddingTop: 20,
+          paddingBottom: 20,
+          borderBottomWidth: 3,
+          borderBottomColor: "white",
+        }}
+      >
+        <Calendar
+          onDayPress={onDayPress}
+          theme={calendarTheme}
+          markedDates={marked}
+          hideExtraDays={true}
+          minDate={formattedDate}
+          disableArrowLeft={
+            currentMonth.currentCalendarMonth === currentMonth.currentLifeMonth
+          }
+          onMonthChange={handleMonthChange}
+        />
+      </View>
+      <Times />
     </View>
   );
 }
